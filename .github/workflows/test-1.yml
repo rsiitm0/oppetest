@@ -18,7 +18,7 @@ jobs:
           chmod 600 key.pem
       - name: run unit tests
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=no RSIITM0@34.57.93.62 << 'EOF'
+          ssh -i key.pem -o StrictHostKeyChecking=no rsiitm0_gmail_com@34.57.93.62 << 'EOF'
           source ~/.env/bin/activate
           pip install pytest
           touch /tmp/oppe2-1
