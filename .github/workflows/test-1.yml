@@ -27,10 +27,12 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no rsiitm0_gmail_com@34.57.93.62 << 'EOF'
+          cd /home/rsiitm0_gmail_com/test23
           touch report.md
           echo "Result" >> report.md        
           echo "\`\`\`" >> report.md
           echo "metrics from training" >> report.md
-          cat metrics.csv >> report.md
           echo "\`\`\`" >> report.md
           cml comment create --publish report.md
+          EOF
