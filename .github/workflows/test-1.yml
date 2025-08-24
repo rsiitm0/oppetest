@@ -13,6 +13,15 @@ jobs:
         with:
           python-version: "3.9"
       - uses: iterative/setup-cml@v2
+      - name: Set up gcloud CLI
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Install Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: mlopsprj
+          install_components: 'beta' 
       - name: setup ssh key
         run: |
           echo "${{ secrets.SSH_PRIVATE_PEM }}" > key.pem
