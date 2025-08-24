@@ -30,6 +30,7 @@ jobs:
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no rsiitm0_gmail_com@34.57.93.62 << 'EOF'
           cd /home/rsiitm0_gmail_com/test23
+          source ~/.env/bin/activate
           touch report.md
           echo "Result" >> report.md        
           echo "\`\`\`" >> report.md
