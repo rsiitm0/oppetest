@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+      - uses: iterative/setup-cml@v2
       - name: setup ssh key
         run: |
           echo "${{ secrets.SSH_PRIVATE_PEM }}" > key.pem
