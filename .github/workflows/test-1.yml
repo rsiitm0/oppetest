@@ -1,0 +1,47 @@
+name: test1
+on:
+  push
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  test-1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Set up gcloud CLI
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Install Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: mlopsprj
+          install_components: 'beta'       
+      
+      - uses: iterative/setup-cml@v2
+      - name: setup ssh key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_PEM }}" > key.pem
+          chmod 600 key.pem
+      - name: run unit tests
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no RSIITM0@34.57.93.62 << 'EOF'
+          source ~/.env/bin/activate
+          pip install pytest
+          touch /tmp/oppe2-1
+          EOF
+      - name: Create CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          touch report.md
+          echo "Result" >> report.md        
+          echo "\`\`\`" >> report.md
+          echo "metrics from training" >> report.md
+          cat metrics.csv >> report.md
+          echo "\`\`\`" >> report.md
+          cml comment create --publish report.md
